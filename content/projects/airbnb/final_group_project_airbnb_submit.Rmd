@@ -1,0 +1,740 @@
+---
+title: "Final Group Project: Airbnb Analytics"
+author: "Group 34: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+```
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(kableExtra)
+library(infer)
+library(openintro)
+library(tidyquant)
+library(forcats)
+library(DataExplorer)
+library(car)
+library(leaflet)
+library(ggfortify)
+```
+
+# Initiation
+
+We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in **Mexico City**.
+
+```{r echo = T, results = 'hide'}
+
+# download the data
+listings <- vroom::vroom("http://data.insideairbnb.com/mexico/df/mexico-city/2020-06-20/data/listings.csv.gz")
+
+```
+# Exploratory Data Analysis
+
+First we will conduct an Exploratory Data Analysis to better understand our data, understanding the number of columns, rows, type of observations. We will also create scatterplots to better understand correlation between different variables. 
+
+## Looking at the raw data
+
+```{r}
+
+# have an initial look at the data
+glimpse(listings)
+
+```
+
+**Before starting with the actual data cleaning, let's visualize which variables have a lot of missing values.**
+```{r,  fig.width=10,fig.height=10}
+
+# identify missing values
+plot_missing(listings,group = list(Good = 0.05, OK = 0.4, Bad = 0.8, Remove = 1), geom_label_args = list(),
+  title = NULL,
+  ggtheme = theme_gray(), theme_config = list(legend.position = c("bottom")))
+
+```
+
+
+**We will now look at the type of data to understand the kind of variables and the data type. Ensuring that quantitaive variables are stored as numeric data and dealing with missing values.**
+
+## Transform data type
+```{r}
+
+# transform variables into correct data types
+listings_wip <- listings %>% 
+  
+  # remove dollar signs and transform them to numeric data
+  mutate(price = parse_number(price)) %>% 
+  mutate(cleaning_fee = parse_number(cleaning_fee)) %>% 
+  mutate(extra_people = parse_number(extra_people)) %>% 
+  
+  # turn character into factor
+  mutate(room_type = fct_relevel(room_type,
+                                 "Shared room",
+                                 "Private room",
+                                 "Entire home/apt")) %>% 
+
+  # turn character into factor
+  mutate(cancellation_policy = fct_relevel(cancellation_policy,
+                                 "flexible",
+                                 "moderate",
+                                 "strict_14_with_grace_period",
+                                 "super_strict_30",
+                                 "super_strict_60"))
+
+```
+
+## Deal with missing values: cleaning_fee
+```{r echo = T, results = 'hide'}
+
+## number of NAs
+sum(is.na(listings_wip$cleaning_fee))
+
+## setting NAs to 0, because NA means no cleaning was booked
+listings_wip$cleaning_fee[is.na(listings_wip$cleaning_fee)] <- 0
+
+```
+
+## Simplify variables:
+```{r}
+
+# Property type
+
+## what are the most frequent types
+listings_wip %>% 
+  count(property_type, sort = TRUE) 
+
+# visualize it with ggplot
+ggplot(listings_wip)+
+  geom_bar(aes(x=fct_infreq(property_type)))+
+  coord_flip() + 
+  labs(title = "Apartments clearly being the most common property type",
+       subtitle = "Most frequent property types",
+         x = "Property type", 
+         y = "Count") +
+  theme_bw()
+
+# simplify variable 
+listings_wip <- listings_wip %>%
+  mutate(prop_type_simplified = case_when(
+    property_type %in% c("Apartment","House", "Condominium","Loft") ~ property_type, 
+    TRUE ~ "Other"
+  ))
+
+# check if simplification worked
+listings_wip %>%
+  count(property_type, prop_type_simplified) %>%
+  arrange(desc(n))  
+
+```
+
+```{r}
+
+# Minimum nights
+
+## what are the most common values
+listings_wip2 <- listings_wip %>% 
+  count(minimum_nights, sort = TRUE) 
+
+## only include listings with minimum nights of 4
+listings_wip3 <- listings_wip2 %>% 
+  filter(minimum_nights <= 4)
+
+
+# Display result
+listings_wip3 %>%
+ kbl(col.names =c("Minimum Nights","Count") ) %>%
+  kable_material(c("striped", "hover")) %>%
+  kable_styling(fixed_thead = T)
+```
+
+**Which value stands out & what is probably the purpose of listings with such minimum requirements?**
+
+ANSWER: The minimum nights thresholds of **15, 30, 180 and 365** days stand out since they represent a large, but clearly defined period within a year (half a month, one month, half a year, one year). While many listings on Airbnb are peoples' private apartments which they rent out occasionally for a few days, properties with the minimum requirements mentioned above appear to have been built only for the purpose of renting. An example might be an apartment close to a big city which is targeting young professionals that work there for a limited time period. Therefore, those listings are not targeting the typical weekend trip tourists that are looking for a short stay. 
+
+
+## Summary statistics of variables of interests
+
+**To simplify a few steps later on, we are defining lists of variables of interest.**
+
+```{r}
+
+# select variables of interest
+var_of_interest_quant = c("id", "price", "cleaning_fee", "extra_people", "number_of_reviews", "review_scores_rating")
+var_of_interest_qual = c("property_type", "room_type", "neighbourhood")
+var_of_interest = c(var_of_interest_quant, var_of_interest_quant)
+
+```
+
+**To begin, let's pick out a few particularly interesting variables and briefly look at their statistics.** 
+
+```{r}
+
+# compute summary statistics and look for missing values (NA)
+skim(listings_wip)
+
+
+#Output in kable format
+
+favstats(listings_wip$price) %>% 
+  kbl(caption = "Listing Price", col.names = c("Minimum", "Q1","Median", "Q3", "Maximum", "Mean", "SD", "Count", "Missing")) %>%
+  kable_material(c("striped", "hover")) %>%
+  kable_styling(fixed_thead = T)
+
+favstats(listings_wip$cleaning_fee) %>% 
+  kbl(caption = "Cleaning Fee", col.names = c("Minimum", "Q1","Median", "Q3", "Maximum", "Mean", "SD", "Count", "Missing")) %>%
+  kable_material(c("striped", "hover")) %>%
+  kable_styling(fixed_thead = T)
+
+favstats(listings_wip$review_scores_rating) %>% 
+  kbl(caption = "Scores Rating", col.names = c("Minimum", "Q1","Median", "Q3", "Maximum", "Mean", "SD", "Count", "Missing")) %>%
+  kable_material(c("striped", "hover")) %>%
+  kable_styling(fixed_thead = T)
+```
+
+## Creating informative visualizations
+
+By creating infromative visuals we will  be able to better understand the relationships between different variables in our dataframe and help get a better picture.
+
+### Quantitative variables
+
+**Let's look how the selected quantitative variables are distributed.**
+
+**Observations**          
+          
+We may see that the distribution of review ratings has a high concentration on scores between *95 and 98* and is **strongly skewed to the left**, which might indicate that people are more likely to give positive feedback.  While for other variables, we may see after adjusting the x-axis to log10 scale, cleaning fees, extra people and price show approximately normal distribution, although there are some outliers in prices which are extremely large due to the longer period of rent. The number of reviews is more uniformly distributed.
+
+```{r}
+
+# visualizing the quantitative variables
+quant_plot1 <- listings_wip %>%
+  select(var_of_interest_quant) %>% 
+  pivot_longer(cols=2:6, names_to="Category", values_to="Value")
+
+# create ggplot with facet wrap to have each variable next to each other
+ggplot(quant_plot1, aes(x=Value)) +
+  geom_histogram() +
+  facet_wrap(~Category) +
+  scale_x_log10() + 
+  labs(title = "Review scores stand out - strongly skewed to the left",
+       subtitle = "Distribution of selected quantitative variables",
+         x = "Log10", 
+         y = "Count") +
+  theme_bw()
+
+```
+
+**Let's look at the relationship between a few selected variables.**
+
+**1. Relationship between price and review score rating**
+
+As per the below Scatter plot it is evident that the price of the stay and the review ratings have a **slightly positive correlation**. However, we must note that most of the listings have a rating score of 70 or higher.
+
+```{r}
+
+# select relevant variables
+quant_plot2 <- listings_wip %>%
+  select(id, price, bedrooms, number_of_reviews, minimum_nights, review_scores_rating)
+
+# plot price - rating relationship
+ggplot(quant_plot2, aes(x=review_scores_rating, y=price)) +
+  geom_point() +
+  scale_y_log10() +
+  labs(title = "Majority of listing have rating above 70 - afterwards slightly positive correlation",
+       subtitle = "Relationship between price and review score rating",
+         x = "Review score rating", 
+         y = "Price (log10)") +
+  theme_bw()
+
+```
+         
+
+**2. Relationship between price and number of reviews **
+
+The plot below demonstrates that there are **relatively fewer number of ratings for expensive listings**, this could be due to fewer people being able and/or willing to spend the amount required to stay at those properties. 
+
+```{r}
+
+# plot price - # of reviews relationship
+ggplot(quant_plot2, aes(x=number_of_reviews, y=price)) +
+  geom_point() +
+  scale_y_log10() +
+  labs(title = "Intuitive relationship - only few can afford/ review very expensive listings",
+       subtitle = "Relationship between price and number of reviews",
+         x = "Number of reviews", 
+         y = "Price (log10)") +
+  theme_bw()
+
+```
+
+**3. Relationship between the number of reviews and the rating**
+
+Upon analyzing the relationship between number of reviews and rating score it is evident that as **more people review for a property, it is more likely to be highly rated**.
+
+```{r}
+
+# plot number of reviews - review rating score
+ggplot(quant_plot2, aes(x=number_of_reviews, y=review_scores_rating)) +
+  geom_point() +
+  scale_y_log10() +
+  scale_x_log10() +
+  labs(title = "Increasing number of reviews reduces variance in ratings - the more the better",
+       subtitle = "Relationship between the number of reviews and the rating",
+         x = "Number of reviews (log10)", 
+         y = "Rating (log10)") +
+  theme_bw()
+
+```
+
+
+### Qualitative variables
+
+**Let's have a first look again on the property type and prices per night.**
+
+**Observation**       
+
+From the graph, we may see among all properties in Mexico, **apartments are the most common type** with more than 12000 properties collected and **lofts are the least common** with only around 1200. This might be because an apartment has better room layout with convenient facilities and relatively acceptable price and thus it is more popular.  
+  
+We may also see that loft has the highest median price per night among all types, which might also be the reasons for low quantity demanded. While apartment has a medium reasonable price, it is surprising to notice that median price per night for house is lower than that for apartment. One of the reasons might be houses are normally located at rural area and apartments are more central.
+
+```{r}
+
+# plot the different property types
+ggplot(listings_wip, aes(x=fct_infreq(prop_type_simplified))) +
+  geom_bar() +
+  labs(title = "Appartment by far the most common property type on Airbnb in Mexico",
+       subtitle = "Property types in descending order",
+         x = "Property types", 
+         y = "Count") +
+  theme_bw()
+
+# look at price levels for each type
+property_price <- listings_wip %>% 
+  group_by(prop_type_simplified) %>% 
+  summarise(avg_price = median(price))
+
+# plot median prices for each property type
+ggplot(property_price, aes(x=reorder(prop_type_simplified, -avg_price), y=avg_price)) +
+  geom_bar(stat="identity") +
+  labs(title = "House cheaper than appartment - probably due to less central location",
+       subtitle = "Median price by property type in descending order",
+         x = "Property types", 
+         y = "Median price MXN per night") +
+  theme_bw()
+
+```
+
+
+**Let's then analyse the room types and prices per night.**
+
+**Observation**      
+
+When comparing hotel rooms with entire apartments, we might see the **number of entire apartments are nearly 30 times higher than the number of hotel rooms**. This might be because that hotels are more likely to be posted on other hotel websites instead of Airbnb.          
+
+And also, **hotel rooms have the highest median price per night** (more than $1300) among all types of properties, with **shared rooms being the cheapest**. This is intuitively correct as shared rooms tend to be less convenient and luxurious than hotel rooms.
+
+```{r}
+
+listings_wip %>% 
+  count(room_type, sort = TRUE) 
+
+# plot the different property types
+ggplot(listings_wip, aes(x=fct_infreq(room_type))) +
+  geom_bar() +
+  labs(title = "Entire apartment by far the most common room type",
+       subtitle = "Room types in descending order",
+         x = "Room types", 
+         y = "Count") +
+  theme_bw()
+
+# look at price levels for each type
+room_price <- listings_wip %>% 
+  group_by(room_type) %>% 
+  summarise(avg_price_room = median(price))
+
+# plot median prices for each property type
+ggplot(room_price, aes(x=reorder(room_type, -avg_price_room), y=avg_price_room)) +
+  geom_bar(stat="identity") +
+  labs(title = "Hotel rooms are the most expensive room type - shared rooms the cheapest",
+       subtitle = "Median price by property type in descending order",
+         x = "Property types", 
+         y = "Median price MXN per night") +
+  theme_bw()
+
+```
+
+
+**Next, let's find out in which neighborhoods the listings are primarily located.**
+
+**Observation**  
+      
+We may see **Polanco and Roma Norte have the most listings** with more than 1500 properties. This is because the two neighborhoods are mostly where tourists tend to cluster, and are both affluent areas. As there are higher demands for accommodation from tourists, the provision of listings is also higher than other areas. San Pedro De Los Pinos has the least listing because this neighborhood is located in the west of Mexico City and relatively rural and inconvenient in terms of transportation for tourists.          
+
+It is also noticeable that there are many listings without specified area. Since only high level perspective and many unlabeled values, we are going to have a closer look at the locations in the next step - the mapping. 
+
+```{r, fig.width=10}
+
+# filter out 20 most common neighborhoods
+top_neighbourhoods <- listings_wip %>% 
+  count(neighbourhood, sort = TRUE) %>% 
+  top_n(20)
+
+# visualize it with ggplot
+ggplot(top_neighbourhoods, aes(x=reorder(neighbourhood, n), y=n))+
+  geom_bar(stat="identity") + 
+  coord_flip() + 
+  labs(title = "Despite many unlabeled neighbourhoods, Polanco and Roma Norte most common",
+       subtitle = "Neighbourhoods with most listings", 
+         x = "Neighbourhood", 
+         y = "# of listings") +
+  theme_bw()
+
+```
+
+# Mapping
+
+**Let's have deeper look at the listings' locations by plotting them on a map of mexico city. The color of the dots indicate the price level.**
+
+```{r}
+bubbles_color <- colorNumeric(palette = c("darkgreen", "yellow", "red"), listings_wip$price)
+leaflet(data = filter(listings_wip)) %>% 
+  addProviderTiles("OpenStreetMap.Mapnik") %>%
+  addCircleMarkers(lng = ~longitude, 
+                   lat = ~latitude, 
+                   radius = 1, 
+                   color = ~bubbles_color(price), 
+                   fillOpacity = 0.4, 
+                   popup = ~listing_url,
+                  label =  ~paste(room_type,"|",
+                            "Price: ", price)) %>% 
+  addLegend("bottomleft", pal = bubbles_color, 
+            values = ~price,
+            title = "Price of listing",
+            labFormat = labelFormat(prefix = "MXN "),
+            
+  opacity = 5)
+```
+
+
+**It becomes obvious that the prices seem way to high and undifferentiated. This is because there are a few very high outlier prices. Let's remove outliers and look at the map again.**
+
+
+```{r}
+
+# look at statistics to see where to make the cut
+print(fav_stats(listings_wip$price))
+
+# check length before making the cut
+length(listings_wip$price)
+
+# make the cut
+normal_prices <- listings_wip %>% 
+  filter(price > 100) %>% 
+  filter(price < 2500)
+
+# check length after making the cut 
+length(normal_prices$price)
+
+```
+
+Thereby, we **cut out extreme outliers** while keeping >90% of the values. Let's look at the new map.
+
+
+```{r}
+bubbles_color <- colorNumeric(palette = c("darkgreen", "yellow", "red"), normal_prices$price)
+leaflet(data = filter(normal_prices)) %>% 
+  addProviderTiles("OpenStreetMap.Mapnik") %>%
+  addCircleMarkers(lng = ~longitude, 
+                   lat = ~latitude, 
+                   radius = 1, 
+                   color = ~bubbles_color(price), 
+                   fillOpacity = 0.4, 
+                   popup = ~listing_url,
+                  label =  ~paste(room_type,"|", "Price: ", price)) %>% 
+  addLegend("bottomleft", pal = bubbles_color,
+            values = ~price,
+            title = "Price of listing",
+            labFormat = labelFormat(prefix = "MXN "),
+  
+  opacity = 5)
+```
+
+
+# Regression
+
+## Create and analyse target variable Y (price_4_night)
+
+To create the new variable, we continue to use the **normalized prices** (calculated earlier) which exclude outliers.
+
+```{r}
+
+# Calculate the price for 4 nights for 2 people using the normalized prices to exclude outliers
+normal_prices <- normal_prices %>% 
+  mutate(
+    price_4_nights = case_when(guests_included >= 2 ~ (price*4+cleaning_fee),
+                                    TRUE ~ ((price+extra_people)*4+cleaning_fee)),
+    log_price_4_nights = log(price_4_nights)
+    )
+
+```
+
+Let's compare both distributions: without transformation vs. log transformation.
+
+**Observation**
+
+Since the non-transformed data is clearly *skewed to the right*, it makes sense to continue with the log data which is normally distributed. It would be better to use normal distribution here because we can then analyse correlations and make predictions more accurately.
+
+```{r}
+
+# create a histogram to observe the distribution - without log10
+ggplot(normal_prices,aes(x=price_4_nights)) + 
+  geom_histogram() + 
+  theme_bw() + 
+  scale_y_log10() +
+  labs(
+    title="The distribution of price_4_nights is skewed to the right", 
+    subtitle="Distribution of not transformed data",
+    x="Price_4_nights", 
+    y="Count") +
+  theme_bw()
+
+
+
+# create a histogram to observe the distribution - log10
+ggplot(normal_prices,aes(x=log_price_4_nights)) + 
+  geom_histogram() + 
+  theme_bw() + 
+  labs(
+    title="The log distribution of price_4_nights is normally distributed", 
+    subtitle="Distribution of log transformation",
+    x="price_4_nights (log)", 
+    y="Count") +
+  theme_bw()
+
+```
+
+## Model 1
+
+```{r}
+
+# create model 1
+model1 <- lm(log_price_4_nights ~ prop_type_simplified + number_of_reviews + review_scores_rating, data=normal_prices)
+    msummary(model1)
+    autoplot(model1)
+    car::vif(model1)
+    
+```
+**Diagnostics of model 1:**
+
+- Residuals vs. fitted: Linearly assumption is **fulfilled** since the residuals are randomly distributed.
+- Normal Q-Q: Normality assumption is decently **fulfilled**, however, small deviations towards higher quantities 
+- Scale-Location: Equal variance assumption seems to be **fulfilled**.
+- Residuals vs. factor levels: Occasionally, there are a few points with a high leverage impact the estimation.
+- Variance Inflation Factor (VIF): **Not an issue** since all well below 5.
+
+*Overall:* The overall model is significant (see F-statistic) and all explanatory variables are significant at least on a p = 0.01 level. However, the model only explains around 5% of the variance, which is very low. 
+
+
+
+Let's interpret the coefficient of review_scores_rating and prop_type_simplified. 
+*Note:* Since property types are factors with k level, apartment is left out and serves as baseline.
+
+```{r}
+
+# anti-log the coefficients
+condominium <- (exp(0.051008)-1)*100
+house <- (exp(-0.371592)-1)*100
+loft <- (exp(0.123123)-1)*100
+other <- (exp(-0.165880)-1)*100
+
+reviews <- (exp(0.001482)-1)*100
+rating <- (exp(0.003389)-1)*100
+
+
+cat("Condominium =", condominium)
+cat("\nHouse =", house)
+cat("\nLoft =", loft)
+cat("\nOther =", other)
+cat("\nReviews =", reviews)
+cat("\nRating =", rating)
+
+
+```
+
+**Interpretation**
+
+- The model predicts a 4 nights stay in a condominium to be 5.23% more expensive than in an apartment.
+- The model predicts a 4 nights stay in a house to be 31% less expensive than in an apartment.
+- The model predicts a 4 nights stay in a condominium to be 13.1% more expensive than in an apartment.
+- The model predicts a 4 nights stay in a other property types to be 15.3% less expensive than in an apartment.
+
+- The model predicts a 4 nights stay to become 0.14% more expensive with each additional review.
+- The model predicts a 4 nights stay to become 0.39% more expensive with each additional rating point
+
+
+## Model 2: Room_type a good predictor?
+
+Let's see if the **room type** of an airbnb enhances our model, being a good predictor. 
+
+```{r}
+
+# create model 2 (just adding room_type as a explanatory variable)
+model2 <- lm(log_price_4_nights ~ prop_type_simplified + number_of_reviews + review_scores_rating + room_type, data=normal_prices)
+    msummary(model2)
+    autoplot(model2)
+    car::vif(model2)
+
+```
+
+**Diagnostics of model 2:**
+
+
+- Residuals vs. fitted: Linearly assumption is **fulfilled** since the residuals are randomly distributed with equal magnitude and concentration numbers above and below.
+- Normal Q-Q: Normality assumption is **fulfilled** for the values in the middle, however, small deviations towards quantities on two extreme sides.
+- Scale-Location: Equal variance assumption seems to be **fulfilled** since standarised residuals are randomly distributed with equal magnitude and concentration numbers above and below.
+- Residuals vs. factor levels:  Equally distributed above and below, no extreme leverages impact the estimation.
+- Variance Inflation Factor (VIF): **Not an issue** since all well below 5.
+
+*Overall:* The overall model is significant (see F-statistic) and most explanatory variables are significant at least on a p = 0.01 level except the number of reviewing and it shows that there is no significant price difference for 4 nights between apartments and houses.This also explains that an additional reviewing will not increase the price significantly. The model explains 38.5% of the variance, which is higher than the original model. Therefore, this adjusted model is stronger when analysing the correlation between prices and other factors and makes a more accurate estimation.
+
+
+## Additional models: Further questions to explore
+
+**Are the number of bathrooms, bedrooms, beds, or size of the house (accomodates) significant predictors of price_4_nights?**   
+     
+ANSWER: Since bedrooms, bathrooms, and beds are highly correlated, we only select bedrooms as a new predictor. Looking at the diagnostics, we realize however that there are some outliers that add avoidable errors. Therefore, we create the model again with a cleaned bedrooms variable in the next code of chunk.
+
+```{r}
+
+# adding bedrooms variable (without removing outliers)
+model3 <- lm(log_price_4_nights ~ prop_type_simplified + number_of_reviews + review_scores_rating + room_type  + bedrooms, data=normal_prices)
+    msummary(model3)
+    autoplot(model3)
+    car::vif(model3)
+
+```
+**After removing outliers**      
+      
+Comparing the diagnostics of model 3 and 4, we can clearly see the positive effect of removing the outliers. Additionally, it increases *R-squared by 1% to 41%*.      
+     
+Moreover, to answer the question, yes the number of bedrooms is a significant predictor.
+
+```{r}
+
+# removing outlier
+normal_prices <- normal_prices %>% 
+  filter(bedrooms < 6)
+
+# adding bedrooms variable (with removing outliers)
+model4 <- lm(log_price_4_nights ~ prop_type_simplified + number_of_reviews + review_scores_rating + room_type  + bedrooms, data=normal_prices)
+    msummary(model4)
+    autoplot(model4)
+    car::vif(model4)
+
+```
+
+
+**After controlling for other variables, is a listing’s exact location a significant predictor of price_4_nights**     
+      
+ANSWER: **Yes**, the p-value indicates that the exact location is a *significant predictor*. However, it does not increase the explanation power (R-squared) a lot.
+
+```{r}
+
+# adding bedrooms variable (with removing outliers)
+model5 <- lm(log_price_4_nights ~ prop_type_simplified + number_of_reviews + review_scores_rating + room_type  + bedrooms + is_location_exact, data=normal_prices)
+    msummary(model5)
+    autoplot(model5)
+    car::vif(model5)
+
+```
+
+**What is the effect of cancellation_policy on price_4_nights, after we control for other variables?**      
+      
+ANSWER: Depending on the level of cancellation policy, it provides a significant predictor. The fact that a listing has a moderate cancellation policy makes it 12% more expensive compared to a listing with a flexible cancellation policy. Looking at the scale location of this model raises a few questions regarding the standardized residuals.
+
+```{r}
+
+# create model considering cancellation policy
+model6 <- lm(log_price_4_nights ~ prop_type_simplified + number_of_reviews + review_scores_rating + room_type  + bedrooms + is_location_exact + cancellation_policy, data=normal_prices)
+    msummary(model6)
+    autoplot(model6)
+    car::vif(model6)
+    
+# anit-log
+(exp(1.13e-01)-1)*100
+
+```
+
+**Let's compare all the models to see which one to take for the final prediction**
+
+Comparing the 6 models we have created, we can see that we continuously improved the explanation power (r-squared. Therefore, we are going to continue in our final prediction with model6.
+
+```{r}
+
+# use huxtable to compare models
+huxtable::huxreg(model1,model2, model3, model4, model5, model6)
+
+```
+
+
+
+## Best model for final prediciton
+
+**Given information:**     
+Find Airbnb’s that are apartment with a private room, have at least 10 reviews, and an average rating of at least 90. Use your best model to predict the total cost to stay at this Airbnb for 4 nights. Include the appropriate 95% interval with your prediction. Report the point prediction and interval in terms of price_4_nights.
+
+
+**ANSWER:**        
+For a private room in Mexico city with a minimum rating of 90 and at least 10 reviews, the model predicts a **95% price CI of MXN 2057 to MXN 2168**. This corresponds to EUR 82 to EUR 87. Making a sanity check with the actual listings right now, it becomes clear that this price is a quite decent approximation. 
+
+```{r}
+
+# select data based on given restrictions
+final_prediction_data <- normal_prices %>% 
+  filter(room_type == "Private room",
+         review_scores_rating >= 90,
+         number_of_reviews >= 10)
+
+# Make final price predictions and give the corresponding 95% CI
+prediction_log_price_4_nights <- predict(model6, newdata = final_prediction_data, interval = "confidence") %>% 
+  exp() %>% 
+  data.frame() %>%
+  summarize(lower_bound = mean(lwr),
+            predicted_price = mean(fit),
+            upper_bound = mean(upr))
+  
+prediction_log_price_4_nights %>%
+  kbl(col.names = c("Lower Bound (MXN)", "Prediction (MXN)", "Upper Bound (MXN)")) %>%
+  kable_classic("striped") %>%
+  kable_styling(fixed_thead = T)
+
+```
+
+# Details
+
+- Who did you collaborate with: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann
+- Approximately how much time did you spend on this problem set: Approx. 15h
+- What, if anything, gave you the most trouble: --

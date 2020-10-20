@@ -100,7 +100,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Algorithmic Trading"
       subtitle = "Mean Reversion Strategy Using Python"
-      image = "trading.jpg"
+      image = "stock_returns.jpg"
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
@@ -112,7 +112,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Stock Returns"
       subtitle = "Analysis of DJIA Stocks using R"
-      image = "stock_returns.jpg"
+      image = "trading.jpg"
       url = "blogs/magna"
 
 

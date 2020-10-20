@@ -1,0 +1,439 @@
+---
+title: "Session 2: Homework 1"
+author: "Group 34: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann "
+date: "2020-10-20"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_dept: 3
+    toc_float: yes
+    code_folding: show
+---
+
+
+
+<div id="where-do-people-drink-the-most-beer-wine-and-spirits" class="section level1">
+<h1>Where Do People Drink The Most Beer, Wine And Spirits?</h1>
+<p>Back in 2014, <a href="https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/">fivethiryeight.com</a> published an article on alchohol consumption in different countries. The data <code>drinks</code> is available as part of the <code>fivethirtyeight</code> package. Make sure you have installed the <code>fivethirtyeight</code> package before proceeding.</p>
+<pre class="r"><code># import data
+library(fivethirtyeight)
+data(drinks)</code></pre>
+<div id="data-description" class="section level2">
+<h2>Data Description</h2>
+<p><strong>- What are the variable types? Any missing values we should worry about?</strong></p>
+<p><em>ANSWER:</em></p>
+<p>There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.</p>
+<p>No missing values based on the data.</p>
+<pre class="r"><code># initial data exploration
+glimpse(drinks)</code></pre>
+<pre><code>## Rows: 193
+## Columns: 5
+## $ country                      &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Albania&quot;, &quot;Algeria&quot;, &quot;An…
+## $ beer_servings                &lt;int&gt; 0, 89, 25, 245, 217, 102, 193, 21, 261, …
+## $ spirit_servings              &lt;int&gt; 0, 132, 0, 138, 57, 128, 25, 179, 72, 75…
+## $ wine_servings                &lt;int&gt; 0, 54, 14, 312, 45, 45, 221, 11, 212, 19…
+## $ total_litres_of_pure_alcohol &lt;dbl&gt; 0.0, 4.9, 0.7, 12.4, 5.9, 4.9, 8.3, 3.8,…</code></pre>
+<pre class="r"><code>skim(drinks)</code></pre>
+<table style='width: auto;'
+        class='table table-condensed'>
+<caption>
+(#tab:glimpse_skim_data)Data summary
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Name
+</td>
+<td style="text-align:left;">
+drinks
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of rows
+</td>
+<td style="text-align:left;">
+193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of columns
+</td>
+<td style="text-align:left;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_______________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Column type frequency:
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+________________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Group variables
+</td>
+<td style="text-align:left;">
+None
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+min
+</th>
+<th style="text-align:right;">
+max
+</th>
+<th style="text-align:right;">
+empty
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+<th style="text-align:right;">
+whitespace
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+country
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+193
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+beer_servings
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+106.16
+</td>
+<td style="text-align:right;">
+101.14
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+20.0
+</td>
+<td style="text-align:right;">
+76.0
+</td>
+<td style="text-align:right;">
+188.0
+</td>
+<td style="text-align:right;">
+376.0
+</td>
+<td style="text-align:left;">
+▇▃▂▂▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+spirit_servings
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+80.99
+</td>
+<td style="text-align:right;">
+88.28
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+<td style="text-align:right;">
+56.0
+</td>
+<td style="text-align:right;">
+128.0
+</td>
+<td style="text-align:right;">
+438.0
+</td>
+<td style="text-align:left;">
+▇▃▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+wine_servings
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+49.45
+</td>
+<td style="text-align:right;">
+79.70
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+59.0
+</td>
+<td style="text-align:right;">
+370.0
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_litres_of_pure_alcohol
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4.72
+</td>
+<td style="text-align:right;">
+3.77
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+14.4
+</td>
+<td style="text-align:left;">
+▇▃▅▃▁
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># check if missing values
+anyNA(drinks)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="top-25-beer-consuming-countries" class="section level2">
+<h2>Top 25 Beer Consuming Countries</h2>
+<p><strong>- Make a plot that shows the top 25 beer consuming countries</strong></p>
+<pre class="r"><code># rearrange and filter for the top 25
+beer = drinks %&gt;%
+  arrange(desc(beer_servings)) %&gt;% 
+  top_n(25)
+
+# plot the results
+ggplot(beer, aes(x=reorder(country, beer_servings), y= beer_servings)) +
+  geom_bar(stat=&quot;identity&quot;) +
+  coord_flip() +
+  theme_economist() +
+  theme(legend.position = &quot;none&quot;,
+           axis.title.x = element_text()) + 
+  labs(title = &quot;Czech Republic is the top beer consuming country in the world\n&quot;,
+       subtitle = &quot;Top 25 beer consuming countries\n&quot;,
+         x = &quot;Country\n&quot;, 
+         y = &quot;\nBeer servings&quot;)</code></pre>
+<p><img src="/projects/alcohol/alcohol_files/figure-html/beer_plot-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-25-wine-consuming-countries" class="section level2">
+<h2>Top 25 Wine Consuming Countries</h2>
+<p><strong>- Make a plot that shows the top 25 wine consuming countries</strong></p>
+<pre class="r"><code># rearrange and filter for the top 25
+wine = drinks %&gt;%
+  arrange(desc(wine_servings)) %&gt;% 
+  top_n(25)
+
+# plot the results
+ggplot(wine, aes(x=reorder(country, wine_servings), y= wine_servings)) +
+  geom_bar(stat=&quot;identity&quot;) +
+  coord_flip() +
+  theme_economist() +
+  theme(legend.position = &quot;none&quot;,
+           axis.title.x = element_text()) + 
+  labs(title = &quot;France is the top wine consuming country in the world\n&quot;,
+       subtitle = &quot;Top 25 wine consuming countries\n&quot;,
+         x = &quot;Country\n&quot;, 
+         y = &quot;\nWine servings&quot;)</code></pre>
+<p><img src="/projects/alcohol/alcohol_files/figure-html/wine_plot-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-25-spirit-consuming-countries" class="section level2">
+<h2>Top 25 Spirit Consuming Countries</h2>
+<p><strong>- Finally, make a plot that shows the top 25 spirit consuming countries</strong></p>
+<pre class="r"><code># rearrange and filter for the top 25
+spirit = drinks %&gt;%
+  arrange(desc(spirit_servings)) %&gt;% 
+  top_n(25)
+
+# plot the results
+ggplot(wine, aes(x=reorder(country, spirit_servings), y= spirit_servings)) +
+  geom_bar(stat=&quot;identity&quot;) +
+  coord_flip() +
+  theme_economist() +
+  theme(legend.position = &quot;none&quot;,
+           axis.title.x = element_text()) + 
+  labs(title = &quot;Grenada is the top spirit consuming country in the world\n&quot;,
+       subtitle = &quot;Top 25 spirit consuming countries\n&quot;,
+         x = &quot;Country\n&quot;, 
+         y = &quot;\nSpirit servings&quot;)</code></pre>
+<p><img src="/projects/alcohol/alcohol_files/figure-html/spirit_plot-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="interpretation" class="section level2">
+<h2>Interpretation</h2>
+<p><strong>- What can you infer from these plots? Don’t just explain what’s in the graph, but speculate or tell a short story (1-2 paragraphs max).</strong></p>
+<p><em>ANSWER:</em></p>
+<p>Based on the plots above, it becomes obvious that Czech Republic is the leading country in beer consumption, France for wine and Grenada for spirits. However, looking at all three plots together reveals interesting insights. Across all plots, European countries are clearly dominating and thus consuming relatively much in comparison to the rest of the world. Furthermore, cultural differences can be observed. For instance, France high wine does not imply that they also drink a lot of other alcoholic beverages (for beer they are only rank 25). Another interesting insight is the demand for strong liquids (spirits) in the eastern part of Europe as one can see in the third plot. The hypothesis that wine is a more expensive and exclusive beverage that is reserved for rich countries cannot be confirmed.</p>
+</div>
+</div>

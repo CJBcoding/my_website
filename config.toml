@@ -69,7 +69,7 @@ disqusShortname = ""
      #Button Style 1
     [[params.navigation.button1]]
       name = "CV"
-      url = "blogs"
+      url = "/content/CV/CV_PE.pdf"
 
     # Button Style 2
     #[[params.navigation.button2]]
@@ -95,25 +95,25 @@ disqusShortname = ""
       title = "Airbnb in Mexico"
       subtitle = "Data Analysis and Predictive Model using R"
       image = "airbnb.jpg"
-      url = "blogs/tempus"
+      url = "content/projects/airbnb"
       
     [[params.tiles.showcase]]
       title = "Algorithmic Trading"
       subtitle = "Mean Reversion Strategy Using Python"
       image = "stock_returns.jpg"
-      url = "blogs/aliquam"
+      url = "content/projects/alg_trading"
 
     [[params.tiles.showcase]]
       title = "Global Alcohol Consumption"
       subtitle = "Analysis of Beverages Demand and Production using R"
       image = "beer.jpg"
-      url = "blogs/ipsum"
+      url = "content/projects/alcohol"
       
     [[params.tiles.showcase]]
       title = "Stock Returns"
       subtitle = "Analysis of DJIA Stocks using R"
       image = "trading.jpg"
-      url = "blogs/magna"
+      url = "content/projects/stocks"
 
 
     #[[params.tiles.showcase]]

@@ -76,11 +76,355 @@
                                 <h1></h1>
                             </header>
                             
-                            
+                            <h1 id="mean-reverse-pairs-trading-strategy---investment-fundamentals-group-34">Mean reverse pairs trading strategy - Investment Fundamentals (Group 34)</h1>
+<p>Mean Reversion strategy using Pair trading is one of the most popular hedge funds investment strategies. As markets are constantly shifting in and out of the mean reversal cycles, this strategy bets that prices will return to the average or mean.</p>
+<p>Members: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># import required libraries</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> statsmodels
+<span style="color:#f92672">import</span> statsmodels.api <span style="color:#f92672">as</span> sm
+<span style="color:#f92672">from</span> statsmodels.tsa.stattools <span style="color:#f92672">import</span> coint, adfuller
+<span style="color:#f92672">import</span> os
+<span style="color:#f92672">import</span> arrow
+<span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> time
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sn
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns; sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;whitegrid&#34;</span>)
+<span style="color:#f92672">import</span> datetime
+<span style="color:#f92672">import</span> yfinance <span style="color:#f92672">as</span> yf
+<span style="color:#f92672">import</span> statistics
+<span style="color:#f92672">from</span> pandas_datareader <span style="color:#f92672">import</span> data <span style="color:#66d9ef">as</span> pdr
+<span style="color:#f92672">import</span> matplotlib 
 
+<span style="color:#75715e"># set same font size for a plots</span>
+font <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;family&#39;</span> : <span style="color:#e6db74">&#39;normal&#39;</span>,
+        <span style="color:#e6db74">&#39;weight&#39;</span> : <span style="color:#e6db74">&#39;normal&#39;</span>,
+        <span style="color:#e6db74">&#39;size&#39;</span>   : <span style="color:#ae81ff">20</span>}
 
+matplotlib<span style="color:#f92672">.</span>rc(<span style="color:#e6db74">&#39;font&#39;</span>, <span style="color:#f92672">**</span>font)
+</code></pre></div><h2 id="1-get-stock-data">1. Get stock data</h2>
+<p>We are considering the following 7 companies to select a sutiable pair:</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># specify tickers</span>
+ticker <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;GS&#34;</span>, <span style="color:#e6db74">&#34;JPM&#34;</span>, <span style="color:#e6db74">&#34;C&#34;</span>, <span style="color:#e6db74">&#34;BAC&#34;</span>, <span style="color:#e6db74">&#34;MS&#34;</span>, <span style="color:#e6db74">&#34;WFC&#34;</span>, <span style="color:#e6db74">&#34;BK&#34;</span>]
 
+<span style="color:#75715e"># specify period of intrerest</span>
+start <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>datetime(<span style="color:#ae81ff">2015</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+end <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>datetime(<span style="color:#ae81ff">2019</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
 
+<span style="color:#75715e"># get data from yahoo</span>
+df <span style="color:#f92672">=</span> pdr<span style="color:#f92672">.</span>get_data_yahoo(ticker, start, end)[<span style="color:#e6db74">&#39;Close&#39;</span>]
+df<span style="color:#f92672">.</span>tail()
+</code></pre></div><pre><code>[*********************100%***********************]  7 of 7 completed
+</code></pre>
+<!-- raw HTML omitted -->
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+<p><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<h2 id="2-explore-data-and-select-pairs-based-on-correlation">2. Explore data and select pairs based on correlation</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># look at the stocks plot to get an overview</span>
+
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> ticker:
+    figure <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>))
+    plt<span style="color:#f92672">.</span>title(i, font)
+    plt<span style="color:#f92672">.</span>plot(df[i])
+    figure<span style="color:#f92672">.</span>show
+</code></pre></div><pre><code>findfont: Font family ['normal'] not found. Falling back to DejaVu Sans.
+</code></pre>
+<p><img src="output_8_1.png" alt="png"></p>
+<p><img src="output_8_2.png" alt="png"></p>
+<p><img src="output_8_3.png" alt="png"></p>
+<p><img src="output_8_4.png" alt="png"></p>
+<p><img src="output_8_5.png" alt="png"></p>
+<p><img src="output_8_6.png" alt="png"></p>
+<p><img src="output_8_7.png" alt="png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># create correlation table to select correlated pair</span>
+corr_matrix <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>corr()
+
+<span style="color:#75715e"># visualize correlation matrix with a heatmap</span>
+fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">35</span>,<span style="color:#ae81ff">12</span>))
+sn<span style="color:#f92672">.</span>heatmap(corr_matrix, annot<span style="color:#f92672">=</span>True, ax<span style="color:#f92672">=</span>ax)
+</code></pre></div><pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x121e84a30&gt;
+</code></pre>
+<p><img src="output_9_1.png" alt="png"></p>
+<p>We decided to move on with Morgan Stanley and Citi Bank since they are very strongly correlated (0.97).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># choose pair to continuue with</span>
+SS1 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;MS&#34;</span>
+SS2 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C&#34;</span>
+S1 <span style="color:#f92672">=</span> df[SS1]
+S2 <span style="color:#f92672">=</span> df[SS2]
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># visualize selected pair</span>
+figure <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>))
+plt<span style="color:#f92672">.</span>title((SS1,SS2))
+plt<span style="color:#f92672">.</span>plot(S1, label<span style="color:#f92672">=</span>SS1)
+plt<span style="color:#f92672">.</span>plot(S2, label<span style="color:#f92672">=</span>SS2)
+plt<span style="color:#f92672">.</span>legend()
+figure<span style="color:#f92672">.</span>show
+</code></pre></div><pre><code>&lt;bound method Figure.show of &lt;Figure size 2232x864 with 1 Axes&gt;&gt;
+</code></pre>
+<p><img src="output_12_1.png" alt="png"></p>
+<h2 id="3-calculate--visualize-spread-and-ratio">3. Calculate &amp; visualize spread and ratio</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># spread</span>
+spread <span style="color:#f92672">=</span> S1<span style="color:#f92672">-</span>S2
+spread<span style="color:#f92672">.</span>plot(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gold&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(spread<span style="color:#f92672">.</span>mean(), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+plt<span style="color:#f92672">.</span>xlim(start, end)
+plt<span style="color:#f92672">.</span>legend([<span style="color:#e6db74">&#39;Spread&#39;</span>]);
+</code></pre></div><p><img src="output_14_0.png" alt="png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># ratio</span>
+ratio <span style="color:#f92672">=</span> S1<span style="color:#f92672">/</span>S2
+ratio<span style="color:#f92672">.</span>plot(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gold&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(ratio<span style="color:#f92672">.</span>mean(), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+plt<span style="color:#f92672">.</span>xlim(start, end)
+plt<span style="color:#f92672">.</span>legend([<span style="color:#e6db74">&#39;Price Ratio&#39;</span>]);
+</code></pre></div><p><img src="output_15_0.png" alt="png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># calculate and plot z-score for ratio over time</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">zscore</span>(series):
+    <span style="color:#66d9ef">return</span> (series <span style="color:#f92672">-</span> series<span style="color:#f92672">.</span>mean()) <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>std(series)
+
+z_scores <span style="color:#f92672">=</span> zscore(ratio)
+
+z_scores<span style="color:#f92672">.</span>plot(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gold&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(zscore(ratio)<span style="color:#f92672">.</span>mean(), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#ae81ff">1.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, linestyle<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;--&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, linestyle<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;--&#34;</span>)
+plt<span style="color:#f92672">.</span>xlim(start, end)
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img src="output_16_0.png" alt="png"></p>
+<h2 id="4-trading-alogrithm-strategy">4. Trading alogrithm/ strategy</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Trading algorithm</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trade</span>(S1, S2, window1, window2):
+    
+    <span style="color:#75715e"># If window length is 0, algorithm doesn&#39;t make sense, so exit</span>
+    <span style="color:#66d9ef">if</span> (window1 <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">or</span> (window2 <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>):
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+    
+    <span style="color:#75715e"># Compute rolling mean and rolling standard deviation</span>
+    ratios <span style="color:#f92672">=</span> S1<span style="color:#f92672">/</span>S2
+    ma1 <span style="color:#f92672">=</span> ratios<span style="color:#f92672">.</span>rolling(window<span style="color:#f92672">=</span>window1,
+                               center<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>mean()
+    ma2 <span style="color:#f92672">=</span> ratios<span style="color:#f92672">.</span>rolling(window<span style="color:#f92672">=</span>window2,
+                               center<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>mean()
+    std <span style="color:#f92672">=</span> ratios<span style="color:#f92672">.</span>rolling(window<span style="color:#f92672">=</span>window2,
+                        center<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>std()
+    zscore <span style="color:#f92672">=</span> (ma1 <span style="color:#f92672">-</span> ma2)<span style="color:#f92672">/</span>std
+    
+    S1_change <span style="color:#f92672">=</span> S1<span style="color:#f92672">.</span>pct_change()
+    S2_change <span style="color:#f92672">=</span> S2<span style="color:#f92672">.</span>pct_change()
+    
+    <span style="color:#75715e"># lists for output generation</span>
+    trade_entry <span style="color:#f92672">=</span> []
+    trade_exit <span style="color:#f92672">=</span> []
+    returns_list <span style="color:#f92672">=</span> []
+    average_capital <span style="color:#f92672">=</span> []
+    typeoftrade_S1 <span style="color:#f92672">=</span>[]
+    typeoftrade_S2 <span style="color:#f92672">=</span>[]
+    success_trades <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    loss_trades <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    
+    <span style="color:#75715e"># balances</span>
+    Return <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    S1_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    S2_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    countS1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    countS2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(ratios)):
+        <span style="color:#75715e"># Transactions when z &lt; -2</span>
+        <span style="color:#66d9ef">if</span> zscore[i] <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">and</span> (countS1 <span style="color:#f92672">+</span> countS2) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+            countS1 <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+            countS2 <span style="color:#f92672">+=</span> <span style="color:#f92672">-</span>ratios[i]
+            S1_value <span style="color:#f92672">+=</span> <span style="color:#f92672">-</span>S1[i] <span style="color:#f92672">*</span> countS1  <span style="color:#75715e"># long in S1</span>
+            S2_value <span style="color:#f92672">+=</span> S2[i] <span style="color:#f92672">*</span> <span style="color:#f92672">-</span>countS2  <span style="color:#75715e"># short in S2 (here it has to be poisitive, but down there negative)</span>
+            trade_entry<span style="color:#f92672">.</span>append(ratios<span style="color:#f92672">.</span>index[i])
+            typeoftrade_S1<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;Long&#34;</span>)
+            typeoftrade_S2<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;Short&#34;</span>)
+            average_capital<span style="color:#f92672">.</span>append(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>abs(S1_value))
+                                  
+            <span style="color:#75715e">#print(&#34;&#34;)</span>
+            <span style="color:#75715e">#print(&#34;++++++++++ INVEST ++++++++++&#34;)</span>
+            <span style="color:#75715e">#print(&#34;Time &#34;, ratios.index[i])</span>
+            <span style="color:#75715e">#print(&#39;Long S1, short S2,  Z-score: %s;  S1: %s; S2: %s;  Ratio: %s&#39;%(zscore[i], S1[i], S2[i], ratios[i]))</span>
+            <span style="color:#75715e">#print(&#34;S1:&#34;,S1_value, &#34;S2:&#34;, S2_value)</span>
+            <span style="color:#75715e">#print(&#34;CountS1:&#34;, countS1, &#34;CountS2:&#34;, countS2)</span>
+        <span style="color:#75715e"># Transactions when z &gt; 2</span>
+        <span style="color:#66d9ef">elif</span> zscore[i] <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">and</span> (countS1 <span style="color:#f92672">+</span> countS2) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+            countS1 <span style="color:#f92672">+=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+            countS2 <span style="color:#f92672">+=</span> ratios[i]
+            S1_value <span style="color:#f92672">+=</span> S1[i]  <span style="color:#75715e"># short S1</span>
+            S2_value <span style="color:#f92672">+=</span> <span style="color:#f92672">-</span>S2[i] <span style="color:#f92672">*</span> ratios[i]  <span style="color:#75715e"># long S2</span>
+            trade_entry<span style="color:#f92672">.</span>append(ratios<span style="color:#f92672">.</span>index[i])
+            typeoftrade_S1<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;Short&#34;</span>)
+            typeoftrade_S2<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;Long&#34;</span>)
+            average_capital<span style="color:#f92672">.</span>append(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>abs(S1_value))
+            
+            <span style="color:#75715e">#print(&#34;&#34;)</span>
+            <span style="color:#75715e">#print(&#34;++++++++++ INVEST ++++++++++&#34;)</span>
+            <span style="color:#75715e">#print(&#34;Time &#34;, ratios.index[i])</span>
+            <span style="color:#75715e">#print(&#39;Short S1, Long S2,  Z-score: %s;  S1: %s; S2: %s; Ratio: %s&#39;%(zscore[i], S1[i], S2[i], ratios[i]))</span>
+            <span style="color:#75715e">#print(&#34;S1:&#34;,S1_value, &#34;S2:&#34;, S2_value)</span>
+            <span style="color:#75715e">#print(&#34;CountS1:&#34;, countS1, &#34;CountS2:&#34;, countS2)</span>
+        <span style="color:#75715e"># Clear positions if the z-score between 1 and -1</span>
+        <span style="color:#66d9ef">elif</span> abs(zscore[i]) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">and</span> (abs(countS1) <span style="color:#f92672">+</span> abs(countS2) <span style="color:#f92672">!=</span><span style="color:#ae81ff">0</span>):
+            S1_sale <span style="color:#f92672">=</span> S1[i] <span style="color:#f92672">*</span> countS1 
+            S2_sale <span style="color:#f92672">=</span> S2[i] <span style="color:#f92672">*</span> countS2
+            
+            potential_win_loss <span style="color:#f92672">=</span> (S1_sale <span style="color:#f92672">+</span> S1_value) <span style="color:#f92672">+</span> (S2_sale<span style="color:#f92672">+</span>S2_value)
+            return_in_pct <span style="color:#f92672">=</span> potential_win_loss<span style="color:#f92672">/</span> (abs(S1_value) <span style="color:#f92672">+</span> abs(S2_value))
+            
+            <span style="color:#75715e"># increase profitability of proceeded trades</span>
+            <span style="color:#66d9ef">if</span> (potential_win_loss <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">5</span>):
+                Return <span style="color:#f92672">+=</span> potential_win_loss
+                returns_list<span style="color:#f92672">.</span>append(potential_win_loss)
+                trade_exit<span style="color:#f92672">.</span>append(ratios<span style="color:#f92672">.</span>index[i])
+                
+                <span style="color:#75715e">#print(&#34;&#34;)</span>
+                <span style="color:#75715e">#print(&#34;++++++++++ SALE ++++++++++&#34;)</span>
+                <span style="color:#75715e">#print(&#34;Time &#34;, ratios.index[i], &#34;Cum. Return:&#34;, Return)</span>
+                <span style="color:#75715e">#print(&#39;Exit: %s;  Z-score: %s;  S1: %s;  S2: %s;  Ratio: %s&#39;%(Return, zscore[i], S1[i], S2[i], ratios[i]))</span>
+                <span style="color:#75715e">#print(S1_sale, S2_sale)</span>
+                <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Awesome! Return of </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, in percent: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>(potential_win_loss, <span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>return_in_pct))
+                
+                countS1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                countS2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                S1_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                S2_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                success_trades <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+                
+            <span style="color:#75715e"># limit potential for loss</span>
+            <span style="color:#66d9ef">elif</span> (potential_win_loss <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>):
+                Return <span style="color:#f92672">+=</span> potential_win_loss
+                returns_list<span style="color:#f92672">.</span>append(potential_win_loss)
+                trade_exit<span style="color:#f92672">.</span>append(ratios<span style="color:#f92672">.</span>index[i])
+                
+                <span style="color:#75715e">#print(&#34;&#34;)</span>
+                <span style="color:#75715e">#print(&#34;++++++++++ SALE ++++++++++&#34;)</span>
+                <span style="color:#75715e">#print(&#34;Time &#34;, ratios.index[i], &#34;Cum. Return:&#34;, Return)</span>
+                <span style="color:#75715e">#print(&#39;Exit: %s;  Z-score: %s;  S1: %s;  S2: %s;  Ratio: %s&#39;%(Return, zscore[i], S1[i], S2[i], ratios[i]))</span>
+                <span style="color:#75715e">#print(S1_sale, S2_sale)</span>
+                <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Bad trade! Have to take a loss of </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, in percent: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>(potential_win_loss, <span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>return_in_pct))
+
+                countS1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                countS2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> 
+                S1_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                S2_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                loss_trades <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+                
+            <span style="color:#66d9ef">else</span>:
+                <span style="color:#75715e">#print(&#34;Triggered, but not profitable to execute.&#34;)</span>
+                <span style="color:#66d9ef">pass</span>
+            
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#66d9ef">pass</span>
+        
+        trade_dates <span style="color:#f92672">=</span> dict(zip(trade_entry, trade_exit))
+            
+    <span style="color:#66d9ef">return</span> Return, trade_dates, returns_list, typeoftrade_S1, typeoftrade_S2, zscore, average_capital, success_trades, loss_trades
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># specify length of train test data split</span>
+x <span style="color:#f92672">=</span> round(<span style="color:#ae81ff">0.7</span> <span style="color:#f92672">*</span> len(df))
+y <span style="color:#f92672">=</span> x<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>
+</code></pre></div><h3 id="41-train-the-algorithm">4.1 Train the algorithm</h3>
+<p>Note: you can remove the &lsquo;#&rsquo; in front of the print to gain more insights for each trade.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># optimize thresholds based on training data</span>
+Return, trade_dates, returns_list, typeoftrade_S1, typeoftrade_S2, zscore, average_capital, success_trades, loss_trades <span style="color:#f92672">=</span> trade(df[SS1]<span style="color:#f92672">.</span>iloc[:x], df[SS2]<span style="color:#f92672">.</span>iloc[:x], <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>)
+
+</code></pre></div><pre><code>Awesome! Return of 5.167397042272874, in percent: 7.47165524675056
+Awesome! Return of 5.787773930102269, in percent: 8.953858268490537
+Awesome! Return of 5.009005254462792, in percent: 5.987335686349523
+</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># summary of training statistics</span>
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Absolute return:&#34;</span>, Return)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of success trades:&#34;</span>, success_trades)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of loss trades:&#34;</span>, loss_trades)
+returnon_capital <span style="color:#f92672">=</span> Return<span style="color:#f92672">/</span>statistics<span style="color:#f92672">.</span>mean(average_capital)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Return on capital:&#34;</span>, returnon_capital<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>,<span style="color:#e6db74">&#34;%&#34;</span>)
+</code></pre></div><pre><code>Absolute return: 15.964176226837935
+Number of success trades: 3
+Number of loss trades: 0
+Return on capital: 20.55252782958857 %
+</code></pre>
+<h3 id="42-test-the-algorithm">4.2 Test the algorithm</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># use trained threshold for unseen data</span>
+Return, trade_dates, returns_list, typeoftrade_S1, typeoftrade_S2, zscore, average_capital, success_trades, loss_trades <span style="color:#f92672">=</span> trade(df[SS1]<span style="color:#f92672">.</span>iloc[y:], df[SS2]<span style="color:#f92672">.</span>iloc[y:], <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>);
+</code></pre></div><pre><code>Awesome! Return of 7.735425166469781, in percent: 7.793093894812951
+Awesome! Return of 5.174363389124025, in percent: 4.794628870382043
+Awesome! Return of 5.0714496443562425, in percent: 5.273969895193112
+Awesome! Return of 6.308458871312091, in percent: 7.069093480865329
+</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># summary of training statistics</span>
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Absolute return:&#34;</span>, Return)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of success trades:&#34;</span>, success_trades)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of loss trades:&#34;</span>, loss_trades)
+returnon_capital <span style="color:#f92672">=</span> Return<span style="color:#f92672">/</span>statistics<span style="color:#f92672">.</span>mean(average_capital)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Return on capital:&#34;</span>, returnon_capital<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>,<span style="color:#e6db74">&#34;%&#34;</span>)
+</code></pre></div><pre><code>Absolute return: 24.28969707126214
+Number of success trades: 4
+Number of loss trades: 0
+Return on capital: 24.748786956005077 %
+</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># looking at the spread</span>
+spread <span style="color:#f92672">=</span> S1<span style="color:#f92672">-</span>S2
+spread<span style="color:#f92672">.</span>plot(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gold&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(spread<span style="color:#f92672">.</span>mean(), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+plt<span style="color:#f92672">.</span>xlim(start, end)
+plt<span style="color:#f92672">.</span>legend([<span style="color:#e6db74">&#39;Spread&#39;</span>])
+<span style="color:#66d9ef">for</span> i,k <span style="color:#f92672">in</span> trade_dates<span style="color:#f92672">.</span>items():
+    <span style="color:#75715e">#plt.axvline(pd.Timestamp(i), color = &#34;black&#34;)</span>
+    <span style="color:#75715e">#print(i, k)</span>
+    plt<span style="color:#f92672">.</span>axvspan(pd<span style="color:#f92672">.</span>Timestamp(i), pd<span style="color:#f92672">.</span>Timestamp(k), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lightblue&#39;</span>, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+    
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img src="output_27_0.png" alt="png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># detailed/ zoomed-in look at timing and return of trades</span>
+a <span style="color:#f92672">=</span> df[SS1]<span style="color:#f92672">.</span>iloc[y:]
+b <span style="color:#f92672">=</span> df[SS2]<span style="color:#f92672">.</span>iloc[y:]
+
+plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>))
+
+plt<span style="color:#f92672">.</span>plot(a)
+plt<span style="color:#f92672">.</span>plot(b, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;red&#34;</span>)
+
+counter <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+
+<span style="color:#66d9ef">for</span> i,k <span style="color:#f92672">in</span> trade_dates<span style="color:#f92672">.</span>items():
+    <span style="color:#75715e">#plt.axvline(pd.Timestamp(i), color = &#34;black&#34;)</span>
+    <span style="color:#75715e">#print(i, k)</span>
+    plt<span style="color:#f92672">.</span>axvspan(pd<span style="color:#f92672">.</span>Timestamp(i), pd<span style="color:#f92672">.</span>Timestamp(k), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lightblue&#39;</span>, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+    plt<span style="color:#f92672">.</span>annotate((<span style="color:#e6db74">&#34;Return: &#34;</span>, round(returns_list[counter])), xy<span style="color:#f92672">=</span>(pd<span style="color:#f92672">.</span>Timestamp(k), a[k]), xytext<span style="color:#f92672">=</span>(pd<span style="color:#f92672">.</span>Timestamp(k), a[k]<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>))
+    plt<span style="color:#f92672">.</span>annotate(typeoftrade_S1[counter], xy<span style="color:#f92672">=</span>(pd<span style="color:#f92672">.</span>Timestamp(i), a[i]), xytext<span style="color:#f92672">=</span>(pd<span style="color:#f92672">.</span>Timestamp(i), a[i]<span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>))
+    plt<span style="color:#f92672">.</span>annotate(typeoftrade_S2[counter], xy<span style="color:#f92672">=</span>(pd<span style="color:#f92672">.</span>Timestamp(i), b[i]), xytext<span style="color:#f92672">=</span>(pd<span style="color:#f92672">.</span>Timestamp(i), b[i]<span style="color:#f92672">+</span><span style="color:#ae81ff">5</span>))
+    counter <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span> 
+    
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img src="output_28_0.png" alt="png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># show thresholds and how they got triggered</span>
+plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">31</span>,<span style="color:#ae81ff">12</span>))
+plt<span style="color:#f92672">.</span>plot(zscore)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#ae81ff">2.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;green&#39;</span>)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#f92672">-</span><span style="color:#ae81ff">2.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;green&#39;</span>)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#ae81ff">1.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, linestyle<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;--&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, linestyle<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;--&#34;</span>)
+plt<span style="color:#f92672">.</span>axhline(<span style="color:#ae81ff">0.0</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+<span style="color:#75715e">#plt.axvline(pd.Timestamp(&#39;2017-11-28&#39;), color = &#34;black&#34;)</span>
+
+<span style="color:#66d9ef">for</span> i,k <span style="color:#f92672">in</span> trade_dates<span style="color:#f92672">.</span>items():
+    <span style="color:#75715e">#plt.axvline(pd.Timestamp(i), color = &#34;black&#34;)</span>
+    <span style="color:#75715e">#print(i, k)</span>
+    plt<span style="color:#f92672">.</span>axvspan(pd<span style="color:#f92672">.</span>Timestamp(i), pd<span style="color:#f92672">.</span>Timestamp(k), color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lightblue&#39;</span>, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+    
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img src="output_29_0.png" alt="png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
+</code></pre></div>
                         </div>
                     </section>
             <!-- Disqus Inject -->

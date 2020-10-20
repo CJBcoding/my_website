@@ -101,7 +101,7 @@ disqusShortname = ""
       title = "Algorithmic Trading"
       subtitle = "Mean Reversion Strategy Using Python"
       image = "stock_returns.jpg"
-      url = "projects/alg_trading/HF_mean_reversion_submit_final"
+      url = "projects/alg_trading"
 
     [[params.tiles.showcase]]
       title = "Global Alcohol Consumption"

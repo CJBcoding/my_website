@@ -19,14 +19,15 @@
     
     <item>
       <title>Session 2: Homework 1</title>
-      <link>https://cjbcoding.netlify.app/projects/alcohol/alcohol/</link>
+      <link>https://cjbcoding.netlify.app/projects/alcohol/</link>
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://cjbcoding.netlify.app/projects/alcohol/alcohol/</guid>
-      <description>Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries. The data drinks is available as part of the fivethirtyeight package. Make sure you have installed the fivethirtyeight package before proceeding.
+      <guid>https://cjbcoding.netlify.app/projects/alcohol/</guid>
+      <description>knitr::include_graphics(here::here(&amp;quot;images&amp;quot;, &amp;quot;/Users/Christopher/Google Drive/LBS (Master)/Term 1/Data Analyics for Finance/my_website/public/img/beer.jpg&amp;quot;), error = FALSE) Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries.
 # import data library(fivethirtyeight) data(drinks) Data Description - What are the variable types? Any missing values we should worry about?
 ANSWER:
-There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.</description>
+There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.
+No missing values based on the data.</description>
     </item>
     
     <item>
@@ -45,7 +46,9 @@ We must first identify which stocks we want to download data for, and for this w
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://cjbcoding.netlify.app/projects/alg_trading/</guid>
-      <description></description>
+      <description>Mean reverse pairs trading strategy - Investment Fundamentals (Group 34) Mean Reversion strategy using Pair trading is one of the most popular hedge funds investment strategies. As markets are constantly shifting in and out of the mean reversal cycles, this strategy bets that prices will return to the average or mean.
+Members: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann
+# import required libraries import numpy as np import pandas as pd import statsmodels import statsmodels.</description>
     </item>
     
   </channel>

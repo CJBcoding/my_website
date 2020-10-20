@@ -12,6 +12,9 @@ output:
     toc_float: yes
     code_folding: show
 ---
+```{r}
+knitr::include_graphics(here::here("images", "/Users/Christopher/Google Drive/LBS (Master)/Term 1/Data Analyics for Finance/my_website/public/img/beer.jpg"), error = FALSE)
+```
 
 
 ```{r, setup, echo=FALSE}
@@ -50,7 +53,7 @@ library(kableExtra)
 
 # Where Do People Drink The Most Beer, Wine And Spirits?
 
-Back in 2014, [fivethiryeight.com](https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/) published an article on alchohol consumption in different countries. The data `drinks` is available as part of the `fivethirtyeight` package. Make sure you have installed the `fivethirtyeight` package before proceeding.
+Back in 2014, [fivethiryeight.com](https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/) published an article on alchohol consumption in different countries. 
 
 ```{r, load_alcohol_data}
 

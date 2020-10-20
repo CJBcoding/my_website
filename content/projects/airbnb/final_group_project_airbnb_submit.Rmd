@@ -1,11 +1,11 @@
 ---
-title: "Final Group Project: Airbnb Analytics"
-author: "Group 34: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann"
+title: "Airbnb Analytics"
+author: "Analysis of data from Mexico City"
 date: "`r Sys.Date()`"
 output:
   html_document:
-    theme: flatly
-    highlight: zenburn
+    theme: forty
+    highlight: kate
     number_sections: yes
     toc: yes
     toc_float: yes

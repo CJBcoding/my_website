@@ -51,9 +51,9 @@ disqusShortname = ""
       name = "About me"
       url = "blogs"
 
-   # [[params.navigation.links]]
-    #  name = "Generic Blog"
-    #  url = "blogs/ipsum"
+    [[params.navigation.links]]
+      name = "My blog"
+      url = "blogs/ipsum"
 
     #[[params.navigation.links]]
      # name = "Elements"
@@ -138,14 +138,13 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
-    url = "blogs"
+    title = "Further interesting projects"
+    subtitle = """Projects of other data scientists that I find exciting. 
+    When I am looking for new projects or techniques I would like to pursue, I come across many interesting
+    projects of other data scientists, developer, etc. who are super insightful and worth reading. Therefore,
+    I am sharing and discussing those projects in my blog. Check it out!"""
+    buttonText = "View projects"
+    url = "blogs/ipsum"
 
 
   # Contact section

@@ -69,7 +69,7 @@ disqusShortname = ""
      #Button Style 1
     [[params.navigation.button1]]
       name = "CV"
-      url = "/content/CV/CV_PE.pdf"
+      url = "/CV/CV_PE.pdf"
 
     # Button Style 2
     #[[params.navigation.button2]]
@@ -95,25 +95,25 @@ disqusShortname = ""
       title = "Airbnb in Mexico"
       subtitle = "Data Analysis and Predictive Model using R"
       image = "airbnb.jpg"
-      url = "content/projects/airbnb"
+      url = "projects/airbnb/final_group_project_airbnb_submit"
       
     [[params.tiles.showcase]]
       title = "Algorithmic Trading"
       subtitle = "Mean Reversion Strategy Using Python"
       image = "stock_returns.jpg"
-      url = "content/projects/alg_trading"
+      url = "projects/alg_trading/HF_mean_reversion_submit_final"
 
     [[params.tiles.showcase]]
       title = "Global Alcohol Consumption"
       subtitle = "Analysis of Beverages Demand and Production using R"
       image = "beer.jpg"
-      url = "content/projects/alcohol"
+      url = "projects/alcohol/homework1_submit_knit-V2"
       
     [[params.tiles.showcase]]
       title = "Stock Returns"
       subtitle = "Analysis of DJIA Stocks using R"
       image = "trading.jpg"
-      url = "content/projects/stocks"
+      url = "projects/stocks/homework1_submit_knit-V2"
 
 
     #[[params.tiles.showcase]]
@@ -140,9 +140,9 @@ disqusShortname = ""
   [params.two]
     enable = true
     title = "Further interesting projects"
-    subtitle = """Projects of other data scientists that I find exciting. 
+    subtitle = """ 
     When I am looking for new projects or techniques I would like to pursue, I come across many interesting
-    projects of other data scientists, developer, etc. who are super insightful and worth reading. Therefore,
+    projects of other data scientists and developers who are super insightful and worth reading. Therefore,
     I am sharing and discussing those projects in my blog. Check it out!"""
     buttonText = "View projects"
     url = "blogs/ipsum"

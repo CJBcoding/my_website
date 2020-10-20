@@ -53,7 +53,7 @@ disqusShortname = ""
 
     [[params.navigation.links]]
       name = "My blog"
-      url = "blogs/ipsum"
+      url = "blogs"
 
     #[[params.navigation.links]]
      # name = "Elements"
@@ -145,7 +145,7 @@ disqusShortname = ""
     projects of other data scientists and developers who are super insightful and worth reading. Therefore,
     I am sharing and discussing those projects in my blog. Check it out!"""
     buttonText = "View projects"
-    url = "blogs/ipsum"
+    url = "blogs"
 
 
   # Contact section

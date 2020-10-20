@@ -2,63 +2,85 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CJB</title>
-    <link>/</link>
+    <link>https://cjbcoding.netlify.app/</link>
     <description>Recent content on CJB</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://cjbcoding.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Airbnb Analytics</title>
-      <link>/projects/airbnb/final_group_project_airbnb_submit/</link>
+      <link>https://cjbcoding.netlify.app/projects/airbnb/final_group_project_airbnb_submit/</link>
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>/projects/airbnb/final_group_project_airbnb_submit/</guid>
+      <guid>https://cjbcoding.netlify.app/projects/airbnb/final_group_project_airbnb_submit/</guid>
       <description>Initiation We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in Mexico City.
 # download the data listings &amp;lt;- vroom::vroom(&amp;quot;http://data.insideairbnb.com/mexico/df/mexico-city/2020-06-20/data/listings.csv.gz&amp;quot;)  Exploratory Data Analysis First we will conduct an Exploratory Data Analysis to better understand our data, understanding the number of columns, rows, type of observations.</description>
     </item>
     
     <item>
+      <title>Session 2: Homework 1</title>
+      <link>https://cjbcoding.netlify.app/projects/alcohol/alcohol/</link>
+      <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://cjbcoding.netlify.app/projects/alcohol/alcohol/</guid>
+      <description>Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries. The data drinks is available as part of the fivethirtyeight package. Make sure you have installed the fivethirtyeight package before proceeding.
+# import data library(fivethirtyeight) data(drinks) Data Description - What are the variable types? Any missing values we should worry about?
+ANSWER:
+There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.</description>
+    </item>
+    
+    <item>
+      <title>Session 2: Homework 1</title>
+      <link>https://cjbcoding.netlify.app/projects/stocks/</link>
+      <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://cjbcoding.netlify.app/projects/stocks/</guid>
+      <description>Returns of financial stocks We will use the tidyquant package to download historical data of stock prices, calculate returns, and examine the distribution of returns.
+We must first identify which stocks we want to download data for, and for this we must know their ticker symbol; Apple is known as AAPL, Microsoft as MSFT, McDonald’s as MCD, etc. The file nyse.csv contains 508 stocks listed on the NYSE, their ticker symbol, name, the IPO (Initial Public Offering) year, and the sector and industry the company is in.</description>
+    </item>
+    
+    <item>
       <title>Aliquam</title>
-      <link>/blogs/aliquam/</link>
+      <link>https://cjbcoding.netlify.app/blogs/aliquam/</link>
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
-      <guid>/blogs/aliquam/</guid>
+      <guid>https://cjbcoding.netlify.app/blogs/aliquam/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Tempus</title>
-      <link>/blogs/tempus/</link>
+      <link>https://cjbcoding.netlify.app/blogs/tempus/</link>
       <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
       
-      <guid>/blogs/tempus/</guid>
+      <guid>https://cjbcoding.netlify.app/blogs/tempus/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Magna</title>
-      <link>/blogs/magna/</link>
+      <link>https://cjbcoding.netlify.app/blogs/magna/</link>
       <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
       
-      <guid>/blogs/magna/</guid>
+      <guid>https://cjbcoding.netlify.app/blogs/magna/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Ipsum</title>
-      <link>/blogs/ipsum/</link>
+      <link>https://cjbcoding.netlify.app/blogs/ipsum/</link>
       <pubDate>Tue, 31 Oct 2017 21:28:43 -0500</pubDate>
       
-      <guid>/blogs/ipsum/</guid>
+      <guid>https://cjbcoding.netlify.app/blogs/ipsum/</guid>
       <description>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</description>
     </item>
     
     <item>
       <title>Hello R Markdown</title>
-      <link>/post/2015-07-23-r-rmarkdown/</link>
+      <link>https://cjbcoding.netlify.app/post/2015-07-23-r-rmarkdown/</link>
       <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
       
-      <guid>/post/2015-07-23-r-rmarkdown/</guid>
+      <guid>https://cjbcoding.netlify.app/post/2015-07-23-r-rmarkdown/</guid>
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
 summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
@@ -66,28 +88,10 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
     
     <item>
       <title></title>
-      <link>/projects/alcohol/</link>
+      <link>https://cjbcoding.netlify.app/projects/alg_trading/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/projects/alcohol/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/projects/alg_trading/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/projects/alg_trading/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/projects/stocks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/projects/stocks/</guid>
+      <guid>https://cjbcoding.netlify.app/projects/alg_trading/</guid>
       <description></description>
     </item>
     

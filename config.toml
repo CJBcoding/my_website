@@ -145,7 +145,7 @@ disqusShortname = ""
     projects of other data scientists and developers who are super insightful and worth reading. Therefore,
     I am sharing and discussing those projects in my blog. Check it out!"""
     buttonText = "View projects"
-    url = "project/soon"
+    url = "blogs"
 
 
   # Contact section

@@ -3,7 +3,6 @@ title: "About me"
 output: html_document
 ---
 
-![](me.jpg)
 Hi, I am a Master in Financial Analysis (MFA2021) student at London Business School.
 
 Before starting my masters program here in London, I studied Business Administration at the University of St. Gallen in Switzerland. After,

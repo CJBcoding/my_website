@@ -42,48 +42,12 @@ We must first identify which stocks we want to download data for, and for this w
     </item>
     
     <item>
-      <title>Aliquam</title>
-      <link>https://cjbcoding.netlify.app/blogs/aliquam/</link>
-      <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
-      
-      <guid>https://cjbcoding.netlify.app/blogs/aliquam/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Coming soon.</title>
-      <link>https://cjbcoding.netlify.app/projects/soon/soon/</link>
+      <link>https://cjbcoding.netlify.app/blogs/soon/</link>
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
-      <guid>https://cjbcoding.netlify.app/projects/soon/soon/</guid>
+      <guid>https://cjbcoding.netlify.app/blogs/soon/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Tempus</title>
-      <link>https://cjbcoding.netlify.app/blogs/tempus/</link>
-      <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
-      
-      <guid>https://cjbcoding.netlify.app/blogs/tempus/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Magna</title>
-      <link>https://cjbcoding.netlify.app/blogs/magna/</link>
-      <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
-      
-      <guid>https://cjbcoding.netlify.app/blogs/magna/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Ipsum</title>
-      <link>https://cjbcoding.netlify.app/blogs/ipsum/</link>
-      <pubDate>Tue, 31 Oct 2017 21:28:43 -0500</pubDate>
-      
-      <guid>https://cjbcoding.netlify.app/blogs/ipsum/</guid>
-      <description>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</description>
     </item>
     
     <item>

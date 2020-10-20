@@ -13,7 +13,7 @@ output:
     code_folding: show
 ---
 
-![](beer.jpg)
+![](trading.jpg)
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(

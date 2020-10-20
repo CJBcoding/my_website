@@ -2,8 +2,6 @@
 title: "Session 2: Homework 1"
 author: "Group 34: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann "
 date: "`r Sys.Date()`"
-image: "beer.jpg"
-slug: "index"
 output:
   html_document:
     theme: flatly
@@ -15,6 +13,7 @@ output:
     code_folding: show
 ---
 
+![](beer.jpg)
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(

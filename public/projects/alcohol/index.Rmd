@@ -12,10 +12,8 @@ output:
     toc_float: yes
     code_folding: show
 ---
-```{r}
-knitr::include_graphics(here::here("images", "/Users/Christopher/Google Drive/LBS (Master)/Term 1/Data Analyics for Finance/my_website/public/img/beer.jpg"), error = FALSE)
-```
 
+![](beer.jpg)
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(

@@ -19,10 +19,10 @@
     
     <item>
       <title>Session 2: Homework 1</title>
-      <link>https://cjbcoding.netlify.app/projects/</link>
+      <link>https://cjbcoding.netlify.app/projects/alcohol/</link>
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://cjbcoding.netlify.app/projects/</guid>
+      <guid>https://cjbcoding.netlify.app/projects/alcohol/</guid>
       <description>Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries.
 # import data library(fivethirtyeight) data(drinks) Data Description - What are the variable types? Any missing values we should worry about?
 ANSWER:

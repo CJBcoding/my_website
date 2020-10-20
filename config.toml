@@ -107,13 +107,13 @@ disqusShortname = ""
       title = "Global Alcohol Consumption"
       subtitle = "Analysis of Beverages Demand and Production using R"
       image = "beer.jpg"
-      url = "projects/alcohol/alcohol"
+      url = "projects/alcohol"
       
     [[params.tiles.showcase]]
       title = "Stock Returns"
       subtitle = "Analysis of DJIA Stocks using R"
       image = "trading.jpg"
-      url = "projects/stocks/stocks"
+      url = "projects/stocks"
 
 
     #[[params.tiles.showcase]]

@@ -38,7 +38,7 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "CJB"
-    subtitle = "Capital"
+    subtitle = "Personal projects"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -187,7 +187,7 @@ disqusShortname = ""
   # Footer section
   [params.footer]
     enable = true
-    copyright = "CJB Capital"
+    copyright = "CJB"
 
     # Uses font awesome icons
     

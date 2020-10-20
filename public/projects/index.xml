@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on CJB</title>
+    <link>/projects/</link>
+    <description>Recent content in Projects on CJB</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 20 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Airbnb Analytics</title>
+      <link>/projects/airbnb/final_group_project_airbnb_submit/</link>
+      <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/airbnb/final_group_project_airbnb_submit/</guid>
+      <description>Initiation We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in Mexico City.
+# download the data listings &amp;lt;- vroom::vroom(&amp;quot;http://data.insideairbnb.com/mexico/df/mexico-city/2020-06-20/data/listings.csv.gz&amp;quot;)  Exploratory Data Analysis First we will conduct an Exploratory Data Analysis to better understand our data, understanding the number of columns, rows, type of observations.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/projects/alcohol/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/alcohol/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/projects/alg_trading/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/alg_trading/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/projects/stocks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/stocks/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

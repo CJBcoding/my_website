@@ -99,20 +99,20 @@ disqusShortname = ""
 
     [[params.tiles.showcase]]
       title = "Airbnb in Mexico"
-      subtitle = "Data Analysis and Predictive Model"
+      subtitle = "Data Analysis and Predictive Model using R"
       image = "airbnb.jpg"
       url = "blogs/tempus"
 
     [[params.tiles.showcase]]
       title = "Stock Returns"
-      subtitle = "Analysis of DJIA Stocks"
+      subtitle = "Analysis of DJIA Stocks using R"
       image = "stock_returns.jpg"
       url = "blogs/magna"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
-      image = "pic04.jpg"
+      title = "Global Alcohol Consumption"
+      subtitle = "Analysis of Beverages Demand and Production using R"
+      image = "beer.jpg"
       url = "blogs/ipsum"
 
     #[[params.tiles.showcase]]

@@ -46,6 +46,9 @@ library(leaflet)
 library(ggfortify)
 ```
 
+The motivation behind this project is to learn more about the airbnb market in Mexico City and to finally come up with a prediction model that tells us how much one can expect to pay for a 4 night stay in an private airbnb with at least 10 reviews and a rating above 90. Let's go!
+
+
 # Initiation
 
 We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in **Mexico City**.

@@ -8,7 +8,7 @@
 	<meta name="description" content="CJB">
 	<meta name="author" content="Christopher Baumann">
 	<meta name="generator" content="Hugo 0.75.1" />
-	<title>Session 2: Homework 1 &middot; CJB</title>
+	<title>Data Analytics on the Global Alcohol Consumption &middot; CJB</title>
 	<!-- Stylesheets -->
 	
 	<link rel="stylesheet" href="https://cjbcoding.netlify.app/css/main.css"/>
@@ -71,7 +71,7 @@
                     <section id="one">
                         <div class="inner">
                             <header class="major">
-                                <h1>Session 2: Homework 1</h1>
+                                <h1>Data Analytics on the Global Alcohol Consumption</h1>
                             </header>
                             
                             
@@ -79,17 +79,16 @@
 
 <p><img src="beer.jpg" /></p>
 <div id="where-do-people-drink-the-most-beer-wine-and-spirits" class="section level1">
-<h1>Where Do People Drink The Most Beer, Wine And Spirits?</h1>
-<p>Back in 2014, <a href="https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/">fivethiryeight.com</a> published an article on alchohol consumption in different countries.</p>
+<h1>Where do people drink the most beer, wine and spirits?</h1>
+<p>Especially among students, different types of beer, wine and spirits are well known and each has his or her preference. But how does that look on a international level with real data? Let’s do a quick analysis to find out!</p>
 <pre class="r"><code># import data
 library(fivethirtyeight)
 data(drinks)</code></pre>
-<div id="data-description" class="section level2">
-<h2>Data Description</h2>
-<p><strong>- What are the variable types? Any missing values we should worry about?</strong></p>
-<p><em>ANSWER:</em></p>
-<p>There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.</p>
-<p>No missing values based on the data.</p>
+<div id="quick-data-exploration" class="section level2">
+<h2>Quick Data Exploration</h2>
+<p><strong>What are the variable types? Any missing values we should worry about?</strong></p>
+<p>There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.
+No missing values based on the data.</p>
 <pre class="r"><code># initial data exploration
 glimpse(drinks)</code></pre>
 <pre><code>## Rows: 193
@@ -432,7 +431,7 @@ anyNA(drinks)</code></pre>
 </div>
 <div id="top-25-beer-consuming-countries" class="section level2">
 <h2>Top 25 Beer Consuming Countries</h2>
-<p><strong>- Make a plot that shows the top 25 beer consuming countries</strong></p>
+<p><strong>What are the top 25 beer consuming countries?</strong></p>
 <pre class="r"><code># rearrange and filter for the top 25
 beer = drinks %&gt;%
   arrange(desc(beer_servings)) %&gt;% 
@@ -453,7 +452,7 @@ ggplot(beer, aes(x=reorder(country, beer_servings), y= beer_servings)) +
 </div>
 <div id="top-25-wine-consuming-countries" class="section level2">
 <h2>Top 25 Wine Consuming Countries</h2>
-<p><strong>- Make a plot that shows the top 25 wine consuming countries</strong></p>
+<p><strong>What are the top 25 wine consuming countries?</strong></p>
 <pre class="r"><code># rearrange and filter for the top 25
 wine = drinks %&gt;%
   arrange(desc(wine_servings)) %&gt;% 
@@ -474,7 +473,7 @@ ggplot(wine, aes(x=reorder(country, wine_servings), y= wine_servings)) +
 </div>
 <div id="top-25-spirit-consuming-countries" class="section level2">
 <h2>Top 25 Spirit Consuming Countries</h2>
-<p><strong>- Finally, make a plot that shows the top 25 spirit consuming countries</strong></p>
+<p><strong>Finally, what are the top 25 spirit consuming countries</strong></p>
 <pre class="r"><code># rearrange and filter for the top 25
 spirit = drinks %&gt;%
   arrange(desc(spirit_servings)) %&gt;% 
@@ -495,8 +494,7 @@ ggplot(wine, aes(x=reorder(country, spirit_servings), y= spirit_servings)) +
 </div>
 <div id="interpretation" class="section level2">
 <h2>Interpretation</h2>
-<p><strong>- What can you infer from these plots? Don’t just explain what’s in the graph, but speculate or tell a short story (1-2 paragraphs max).</strong></p>
-<p><em>ANSWER:</em></p>
+<p><strong>What can we infer from these plots? Any hypotheses?.</strong></p>
 <p>Based on the plots above, it becomes obvious that Czech Republic is the leading country in beer consumption, France for wine and Grenada for spirits. However, looking at all three plots together reveals interesting insights. Across all plots, European countries are clearly dominating and thus consuming relatively much in comparison to the rest of the world. Furthermore, cultural differences can be observed. For instance, France high wine does not imply that they also drink a lot of other alcoholic beverages (for beer they are only rank 25). Another interesting insight is the demand for strong liquids (spirits) in the eastern part of Europe as one can see in the third plot. The hypothesis that wine is a more expensive and exclusive beverage that is reserved for rich countries cannot be confirmed.</p>
 </div>
 </div>

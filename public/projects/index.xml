@@ -13,22 +13,18 @@
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://cjbcoding.netlify.app/projects/airbnb/</guid>
-      <description>Initiation We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in Mexico City.
-# download the data listings &amp;lt;- vroom::vroom(&amp;quot;http://data.insideairbnb.com/mexico/df/mexico-city/2020-06-20/data/listings.csv.gz&amp;quot;)  Exploratory Data Analysis First we will conduct an Exploratory Data Analysis to better understand our data, understanding the number of columns, rows, type of observations.</description>
+      <description>The motivation behind this project is to learn more about the airbnb market in Mexico City and to finally come up with a prediction model that tells us how much one can expect to pay for a 4 night stay in an private airbnb with at least 10 reviews and a rating above 90. Let’s go!
+Initiation We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in Mexico City.</description>
     </item>
     
     <item>
-      <title>Session 2: Homework 1</title>
+      <title>Data Analytics on the Global Alcohol Consumption</title>
       <link>https://cjbcoding.netlify.app/projects/alcohol/</link>
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://cjbcoding.netlify.app/projects/alcohol/</guid>
-      <description>Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries.
-# import data library(fivethirtyeight) data(drinks) Data Description - What are the variable types? Any missing values we should worry about?
-ANSWER:
-There are 4 numerics: beer_servings, spirit_servings, wine_servings and total_litres_of_pure_alcohol and 1 charcter: country.
-No missing values based on the data.
-# initial data exploration glimpse(drinks) ## Rows: 193 ## Columns: 5 ## $ country &amp;lt;chr&amp;gt; &amp;quot;Afghanistan&amp;quot;, &amp;quot;Albania&amp;quot;, &amp;quot;Algeria&amp;quot;, &amp;quot;An… ## $ beer_servings &amp;lt;int&amp;gt; 0, 89, 25, 245, 217, 102, 193, 21, 261, … ## $ spirit_servings &amp;lt;int&amp;gt; 0, 132, 0, 138, 57, 128, 25, 179, 72, 75… ## $ wine_servings &amp;lt;int&amp;gt; 0, 54, 14, 312, 45, 45, 221, 11, 212, 19… ## $ total_litres_of_pure_alcohol &amp;lt;dbl&amp;gt; 0.</description>
+      <description>Where do people drink the most beer, wine and spirits? Especially among students, different types of beer, wine and spirits are well known and each has his or her preference. But how does that look on a international level with real data? Let’s do a quick analysis to find out!
+# import data library(fivethirtyeight) data(drinks) Quick Data Exploration What are the variable types? Any missing values we should worry about?</description>
     </item>
     
     <item>
@@ -47,9 +43,8 @@ We must first identify which stocks we want to download data for, and for this w
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://cjbcoding.netlify.app/projects/alg_trading/</guid>
-      <description>Mean reverse pairs trading strategy - Investment Fundamentals (Group 34) Mean Reversion strategy using Pair trading is one of the most popular hedge funds investment strategies. As markets are constantly shifting in and out of the mean reversal cycles, this strategy bets that prices will return to the average or mean.
-Members: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann
-# import required libraries import numpy as np import pandas as pd import statsmodels import statsmodels.</description>
+      <description>Mean reverse pairs trading strategy Mean Reversion strategy using Pair trading is one of the most popular hedge funds investment strategies. As markets are constantly shifting in and out of the mean reversal cycles, this strategy bets that prices will return to the average or mean.
+# import required libraries import numpy as np import pandas as pd import statsmodels import statsmodels.api as sm from statsmodels.tsa.stattools import coint, adfuller import os import arrow import requests import time import seaborn as sn import matplotlib.</description>
     </item>
     
   </channel>

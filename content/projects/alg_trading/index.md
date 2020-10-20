@@ -1,10 +1,8 @@
 ![](stock_returns.jpg)
 
-# Mean reverse pairs trading strategy - Investment Fundamentals (Group 34)
+# Mean reverse pairs trading strategy
 
 Mean Reversion strategy using Pair trading is one of the most popular hedge funds investment strategies. As markets are constantly shifting in and out of the mean reversal cycles, this strategy bets that prices will return to the average or mean. 
-
-Members: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet, Christopher Baumann
 
 
 ```python

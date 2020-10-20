@@ -57,7 +57,7 @@ We must first identify which stocks we want to download data for, and for this w
 ```{r load_nyse_data, message=FALSE, warning=FALSE}
 
 # import data
-nyse <- read_csv(file="data/nyse.csv")
+nyse <- read_csv(file="/Users/Christopher/Google Drive/LBS (Master)/Term 1/Data Analyics for Finance/my_website/data/nyse.csv")
 
 ```
 

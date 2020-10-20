@@ -178,7 +178,7 @@ for i in ticker:
 
 
 
-![png](output_8_1.png)
+![png](data/output_8_1.png)
 
 
 

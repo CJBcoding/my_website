@@ -9,10 +9,10 @@
     <lastBuildDate>Tue, 20 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://cjbcoding.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Airbnb Analytics</title>
-      <link>https://cjbcoding.netlify.app/projects/airbnb/final_group_project_airbnb_submit/</link>
+      <link>https://cjbcoding.netlify.app/projects/airbnb/</link>
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://cjbcoding.netlify.app/projects/airbnb/final_group_project_airbnb_submit/</guid>
+      <guid>https://cjbcoding.netlify.app/projects/airbnb/</guid>
       <description>Initiation We will be analyzing AirBnB listing data to create a model to predict the total cost for two people staying 4 nights in AirBnB in Mexico City.
 # download the data listings &amp;lt;- vroom::vroom(&amp;quot;http://data.insideairbnb.com/mexico/df/mexico-city/2020-06-20/data/listings.csv.gz&amp;quot;)  Exploratory Data Analysis First we will conduct an Exploratory Data Analysis to better understand our data, understanding the number of columns, rows, type of observations.</description>
     </item>
@@ -47,6 +47,15 @@ We must first identify which stocks we want to download data for, and for this w
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
       <guid>https://cjbcoding.netlify.app/blogs/aliquam/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Coming soon.</title>
+      <link>https://cjbcoding.netlify.app/projects/soon/soon/</link>
+      <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
+      
+      <guid>https://cjbcoding.netlify.app/projects/soon/soon/</guid>
       <description></description>
     </item>
     

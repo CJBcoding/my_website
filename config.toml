@@ -38,7 +38,7 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "CJB"
-    subtitle = "Personal projects"
+    subtitle = "Personal portfolio"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -49,11 +49,11 @@ disqusShortname = ""
 
     [[params.navigation.links]]
       name = "About me"
-      url = "blogs"
+      url = "CV/aboutme"
 
-    [[params.navigation.links]]
-      name = "My blog"
-      url = "blogs"
+    #[[params.navigation.links]]
+      #name = "My blog"
+      #url = "blogs"
 
     #[[params.navigation.links]]
      # name = "Elements"
@@ -113,7 +113,7 @@ disqusShortname = ""
       title = "Airbnb in Mexico"
       subtitle = "Data Analysis and Predictive Model using R"
       image = "airbnb.jpg"
-      url = "projects/airbnb/final_group_project_airbnb_submit"
+      url = "projects/airbnb"
 
 
     #[[params.tiles.showcase]]
@@ -149,10 +149,10 @@ disqusShortname = ""
 
 
   # Contact section
-  [params.contact]
-    enable = true
-    buttonSend = "Send message"
-    buttonClear = "Clear"
+  #[params.contact]
+    #enable = true
+    #buttonSend = "Send message"
+    #buttonClear = "Clear"
 
     # Since this template is static, the contact form uses www.formspree.io as a
     # proxy. The form makes a POST request to their servers to send the actual

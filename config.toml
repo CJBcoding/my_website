@@ -1,7 +1,7 @@
 # Site settings
-baseURL = "https://cjbcodingcontinous.netlify.app/"
+baseURL = "https://cjbcoding.netlify.app/"
 languageCode = "en-us"
-title = "Chris"
+title = "CJB"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics

@@ -92,28 +92,29 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
+      title = "Airbnb in Mexico"
+      subtitle = "Data Analysis and Predictive Model using R"
+      image = "airbnb.jpg"
+      url = "blogs/tempus"
+      
+    [[params.tiles.showcase]]
       title = "Algorithmic Trading"
       subtitle = "Mean Reversion Strategy Using Python"
       image = "trading.jpg"
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
-      title = "Airbnb in Mexico"
-      subtitle = "Data Analysis and Predictive Model using R"
-      image = "airbnb.jpg"
-      url = "blogs/tempus"
-
+      title = "Global Alcohol Consumption"
+      subtitle = "Analysis of Beverages Demand and Production using R"
+      image = "beer.jpg"
+      url = "blogs/ipsum"
+      
     [[params.tiles.showcase]]
       title = "Stock Returns"
       subtitle = "Analysis of DJIA Stocks using R"
       image = "stock_returns.jpg"
       url = "blogs/magna"
 
-    [[params.tiles.showcase]]
-      title = "Global Alcohol Consumption"
-      subtitle = "Analysis of Beverages Demand and Production using R"
-      image = "beer.jpg"
-      url = "blogs/ipsum"
 
     #[[params.tiles.showcase]]
       #title = "Consequat"

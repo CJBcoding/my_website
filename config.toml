@@ -113,7 +113,7 @@ disqusShortname = ""
       title = "Stock Returns"
       subtitle = "Analysis of DJIA Stocks using R"
       image = "trading.jpg"
-      url = "projects/stocks/homework1_submit_knit-V2"
+      url = "projects/stocks/homework1_submit_knit-V2.html"
 
 
     #[[params.tiles.showcase]]

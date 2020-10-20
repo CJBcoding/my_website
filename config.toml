@@ -95,7 +95,7 @@ disqusShortname = ""
       title = "About me"
       subtitle = "A quick introduction"
       image = "me.jpg"
-      url = "projects/stocks"
+      url = "CV/aboutme"
       
     [[params.tiles.showcase]]
       title = "Algorithmic Trading"

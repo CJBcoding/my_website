@@ -92,10 +92,10 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "Airbnb in Mexico"
-      subtitle = "Data Analysis and Predictive Model using R"
-      image = "airbnb.jpg"
-      url = "projects/airbnb/final_group_project_airbnb_submit"
+      title = "About me"
+      subtitle = "A quick introduction"
+      image = "me.jpg"
+      url = "projects/stocks"
       
     [[params.tiles.showcase]]
       title = "Algorithmic Trading"
@@ -108,12 +108,12 @@ disqusShortname = ""
       subtitle = "Analysis of Beverages Demand and Production using R"
       image = "beer.jpg"
       url = "projects/alcohol"
-      
+
     [[params.tiles.showcase]]
-      title = "Stock Returns"
-      subtitle = "Analysis of DJIA Stocks using R"
-      image = "trading.jpg"
-      url = "projects/stocks"
+      title = "Airbnb in Mexico"
+      subtitle = "Data Analysis and Predictive Model using R"
+      image = "airbnb.jpg"
+      url = "projects/airbnb/final_group_project_airbnb_submit"
 
 
     #[[params.tiles.showcase]]
@@ -139,7 +139,7 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Further interesting projects"
+    title = "What others do."
     subtitle = """ 
     When I am looking for new projects or techniques I would like to pursue, I come across many interesting
     projects of other data scientists and developers who are super insightful and worth reading. Therefore,

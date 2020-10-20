@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CVs on CJB</title>
+    <link>https://cjbcoding.netlify.app/cv/</link>
+    <description>Recent content in CVs on CJB</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://cjbcoding.netlify.app/cv/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About me</title>
+      <link>https://cjbcoding.netlify.app/cv/aboutme/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://cjbcoding.netlify.app/cv/aboutme/</guid>
+      <description>Hi, I am a Master in Financial Analysis (MFA2021) student at London Business School.
+Before starting my masters program here in London, I studied Business Administration at the University of St. Gallen in Switzerland. After, graduating in 2018, I took an extended GAP year to gain more experience in all the field that fascinate me. Therefore, I started with a four-month Data Science Bootcamp at ETH Zurich where I developed together with a physicist a AI-based prediction platform for time series data.</description>
+    </item>
+    
+  </channel>
+</rss>

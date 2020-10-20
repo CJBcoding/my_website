@@ -99,5 +99,15 @@ Members: Muhammad Nauman Alam Khan, Tom Invernizzi, Rayna Zhang, Jerome Billiet,
 # import required libraries import numpy as np import pandas as pd import statsmodels import statsmodels.</description>
     </item>
     
+    <item>
+      <title>About me</title>
+      <link>https://cjbcoding.netlify.app/cv/aboutme/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://cjbcoding.netlify.app/cv/aboutme/</guid>
+      <description>Hi, I am a Master in Financial Analysis (MFA2021) student at London Business School.
+Before starting my masters program here in London, I studied Business Administration at the University of St. Gallen in Switzerland. After, graduating in 2018, I took an extended GAP year to gain more experience in all the field that fascinate me. Therefore, I started with a four-month Data Science Bootcamp at ETH Zurich where I developed together with a physicist a AI-based prediction platform for time series data.</description>
+    </item>
+    
   </channel>
 </rss>
